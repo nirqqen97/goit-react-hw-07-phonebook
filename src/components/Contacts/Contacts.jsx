@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import { ContactItem } from "../ContactItem/ContactItem";
 import { FormList } from "./Contacts.styled";
 
@@ -17,7 +16,7 @@ Contacts.propTypes = {
         PropTypes.shape({
           id: PropTypes.string.isRequired,
           name: PropTypes.string.isRequired,
-          telephone: PropTypes.string.isRequired,
+          phone: PropTypes.string.isRequired,
         })
       ).isRequired,
       deleteFromContacts: PropTypes.func.isRequired,

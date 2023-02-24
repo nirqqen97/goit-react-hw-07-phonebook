@@ -1,42 +1,23 @@
-// import { userReducer } from './users/users.reducer';
-import { persistStore,FLUSH,
+import { configureStore } from "@reduxjs/toolkit";
+import {FLUSH,
     REHYDRATE,
     PAUSE,
     PERSIST,
     PURGE,
     REGISTER,} from 'redux-persist'
-// import storage from 'redux-persist/lib/storage'
-import {configureStore} from "@reduxjs/toolkit";
-import {initUsersState} from "./users/users.init-state";
-import {userReducer} from "./users/users.slice";
 import { contactsReducer } from './Contacts/Contacts.slice';
 import { contactsInitState } from './Contacts/Contacts.init-state.slice';
+import { contactsApi } from "./rtk-contacts/rtk-contacts.api";
 
 const initState = {
-    users:initUsersState,
-    contacts : contactsInitState
+    contacts: contactsInitState
 }
-
-// const rootReducer = combineReducers({
-//     users: userReducer,
-//     contacts: contactsReducer
-// })
-
-
-// const persistConfig = {
-//     key: 'root',
-//     storage,
-//     whitelist : ["data"]
-//   }
-   
-// const persistedReducer = persistReducer(persistConfig, rootReducer)
-
 
 export const store = configureStore({
     reducer: {
-      users: userReducer,
-      contacts: contactsReducer
-       },
+        contacts: contactsReducer,
+        [contactsApi.reducerPath]: contactsApi.reducer
+    },
     devTools: true,
     preloadedState: initState,
     middleware: (getDefaultMiddleware) =>
@@ -44,6 +25,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),});
+    }).concat([contactsApi.middleware]),
+});
 
-export const persistor = persistStore(store)
+

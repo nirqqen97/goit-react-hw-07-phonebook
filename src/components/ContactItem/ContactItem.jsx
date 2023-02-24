@@ -8,13 +8,13 @@ export const ContactItem = ({c, deleteFromContacts}) =>{
     }
     return <Item>
         <Name>{c.name}:</Name>
-        <Phone>{c.telephone}</Phone>
+        <Phone>{c.phone}</Phone>
         <Btn type="button" onClick={handleClick}>Delete</Btn>
         </Item>
 }
 ContactItem.propTypes = {
     c: PropTypes.shape({
           name: PropTypes.string.isRequired,
-          telephone: PropTypes.string.isRequired,}),
+          phone: PropTypes.string.isRequired,}),
     deleteFromContacts: PropTypes.func.isRequired
 }

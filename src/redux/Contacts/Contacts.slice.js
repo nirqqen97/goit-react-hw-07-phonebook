@@ -5,7 +5,13 @@ import { getContactsThunk } from './Contacts.thunk';
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState: contactsInitState,
-  reducers: {},
+  reducers: {
+     usersSearchAction: (state,{payload}) => {
+          
+          state.search = payload
+          
+      },
+  },
   extraReducers: {
      [getContactsThunk.pending]: state =>{
           state.status = "loading"
@@ -19,6 +25,9 @@ const contactsSlice = createSlice({
      }
   }
 });
+
+export const {usersSearchAction} = contactsSlice.actions;
+
 
 export const contactsReducer = contactsSlice.reducer;
 

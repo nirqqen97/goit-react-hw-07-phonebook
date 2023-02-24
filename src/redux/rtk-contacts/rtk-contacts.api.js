@@ -1,0 +1,29 @@
+import { createApi,fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+export const contactsApi = createApi({
+    reducerPath: 'rtk-contacts',
+    tagTypes: ['Contacts'],
+    baseQuery: fetchBaseQuery({baseUrl:'https://63f793b8e8a73b486afb43d3.mockapi.io/'}),
+    providesTags: ({data}) =>
+    data?
+        [
+          ...data.map(({ id }) => ({ type: 'Contacts', id })),
+          { type: 'Contacts', id: 'LIST' },
+        ]
+      : // an error occurred, but we still want to refetch this query when `{ type: 'Contacts', id: 'LIST' }` is invalidated
+        [{ type: 'Contacts', id: 'LIST' }],
+    endpoints: (builder) =>({
+        getContacts : builder.query({
+            query: () =>'/contacts'
+        }),
+        deleteContacts : builder.mutation({
+            query : (id) => ({
+                url: `contacts/:${id}`,
+                method: 'DELETE',
+            })
+        }),
+        invalidatesTags: (result, error, id) => [{ type: 'Contacts', id }],
+    }),
+})
+
+export const {useGetContactsQuery,useDeleteContactsMutation} = contactsApi   

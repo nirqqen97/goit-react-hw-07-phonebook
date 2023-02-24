@@ -1,67 +1,64 @@
-import shortid from "shortid";
-import { useEffect, useState } from "react";
-import { Form } from "./Form/Form";
-import {Contacts } from "./Contacts/Contacts";
-import {InputFilter} from "./InputFilter/InputFilter";
-import {Container,Title} from "./App.styled";
-import { useDispatch, useSelector } from "react-redux";
-import { getContactsThunk } from "redux/Contacts/Contacts.thunk";
+  import shortid from "shortid";
+  import { Form } from "./Form/Form";
+  import {Contacts } from "./Contacts/Contacts";
+  import {InputFilter} from "./InputFilter/InputFilter";
+  import {Container,Title} from "./App.styled";
+  import { useDispatch, useSelector } from "react-redux";
+  import { selectFilters, } from "redux/Contacts/Contacts.selector";
+  import { usersSearchAction,} from "redux/Contacts/Contacts.slice";
+  import { useGetContactsQuery,useDeleteContactsMutation } from "redux/rtk-contacts/rtk-contacts.api";
 
-export const App = () =>{
-  
- const test = useSelector(state => state.contacts)
- console.log('test: ', test);
-  const [sContacts, setSContacts] =  useState(() =>JSON.parse(localStorage.getItem("contact"))|| []);
-  
-  const [filter, setFilter] = useState("");
-  const dispatch = useDispatch()
- const deleteFromContacts = (contactToDelete) =>{
-    const deletedList = sContacts.filter(contact => contact.id !== contactToDelete.id);
-    setSContacts(deletedList);
- }
- useEffect(() => {
-  localStorage.setItem("contact", JSON.stringify(sContacts))
-  console.log("componentDID");
-  dispatch(getContactsThunk())
- }, [sContacts,dispatch]);
- 
- 
- const checkIsInContacts = (value) => {
-   const checked = sContacts.find(contact => contact.name === value) !== undefined;
-  return checked
-}
 
- const addFilter = (value) => {
-   setFilter(`${value}`)
-}
+  export const App = () =>{
+    const {data, isLoading, isSuccess}= useGetContactsQuery()
 
- const addContact = (name,telephone) =>{
-  if (checkIsInContacts(name) ) {
-    alert(`${name} is already in contacts`)
-    return
-  }
-   const contact = {
-     id : shortid.generate(),
-     name,
-     telephone,
-   }
-   setSContacts((prev) =>{
-     return [...prev, contact]
-   })
- }
-    const contactsFilter = () => {   
-   
-     const filtered = sContacts.filter(contact => contact.name.toLowerCase().trim().includes(filter.toLowerCase().trim()));
-     return filtered
-  
+    const [trigger] = useDeleteContactsMutation()
+
+    const filter = useSelector(selectFilters)
+
+    const dispatch = useDispatch()
+    
+    const addFilter = (value) => {
+      dispatch(usersSearchAction(value))
     }
-  return (
-           <Container>
-             <Form onSubmit = {addContact}/>
-             <Title>Contacts</Title>
-             <InputFilter onInput = {addFilter} value = {filter}/>
-             <Contacts contacts = {contactsFilter()} deleteFromContacts = {deleteFromContacts}/>
-             </Container>
 
-           )
-}
+  const deleteFromContacts = (contactToDelete) =>{
+      // const deletedList = data.filter(contact => contact.id !== contactToDelete.id);
+      trigger(contactToDelete.id)
+  }
+  
+  const checkIsInContacts = (value) => {
+    const checked = data.find(contact => contact.name === value) !== undefined;
+    return checked
+  }
+  
+  const addContact = (name,telephone) =>{
+    if (checkIsInContacts(name) ) {
+      alert(`${name} is already in contacts`)
+      return
+    }
+    const contact = {
+      id : shortid.generate(),
+      name,
+      telephone,
+    }
+    
+  }
+  const contactsFilter = () => {
+    
+    const filtered = data.filter(contact =>
+      contact.name.toLowerCase().trim().includes(filter.toLowerCase().trim()));
+    return filtered;
+  };
+    return (
+            <Container>
+              <Form onSubmit = {addContact}/>
+              <Title>Contacts</Title>
+              <InputFilter onInput = {addFilter} value = {filter}/>
+              {isLoading && <Title>Loading...</Title>}
+              {isSuccess &&  <Contacts contacts = {contactsFilter()} deleteFromContacts = {deleteFromContacts}/>}
+
+              </Container>
+
+            )
+  }
