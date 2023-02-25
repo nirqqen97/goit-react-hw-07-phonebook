@@ -42,11 +42,7 @@ export const App = () =>{
   };
   
 
-  const contactsFilter = () => {
-    const filtered = data.filter(contact =>
-      contact.name.toLowerCase().trim().includes(filter.toLowerCase().trim()));
-    return filtered;
-  };
+
 
   return (
     <Container>
@@ -54,7 +50,7 @@ export const App = () =>{
       <Title>Contacts</Title>
       <InputFilter onInput={addFilter} value={filter}/>
       {isLoading && <Title>Loading...</Title>}
-      {isSuccess &&  <Contacts contacts={contactsFilter()} deleteFromContacts={deleteFromContacts}/>}
+      {isSuccess &&  <Contacts  deleteFromContacts={deleteFromContacts}/>}
     </Container>
   )
 }
