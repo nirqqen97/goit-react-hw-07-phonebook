@@ -37,12 +37,8 @@ export const App = () =>{
       alert(`${name} is already in contacts`);
       return;
     }
-    const contact = {
-      id: shortid.generate(),
-      name,
-      phone,
-    };
-    addUser({contact}); 
+
+    addUser({id:shortid.generate(),name,phone}); 
   };
   
 
