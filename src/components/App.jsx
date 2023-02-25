@@ -32,7 +32,7 @@ export const App = () =>{
     const checked = data.find(contact => contact.name === value) !== undefined;
     return checked
   }
-  const addContact = (name, telephone) => {
+  const addContact = (name, phone) => {
     if (checkIsInContacts(name)) {
       alert(`${name} is already in contacts`);
       return;
@@ -40,7 +40,7 @@ export const App = () =>{
     const contact = {
       id: shortid.generate(),
       name,
-      telephone,
+      phone,
     };
     addUser({contact}); 
   };
