@@ -10,7 +10,7 @@ export const contactsApi = createApi({
           ...data.map(({ id }) => ({ type: 'Contacts', id })),
           { type: 'Contacts', id: 'LIST' },
         ]
-      : // an error occurred, but we still want to refetch this query when `{ type: 'Contacts', id: 'LIST' }` is invalidated
+      : 
         [{ type: 'Contacts', id: 'LIST' }],
     endpoints: (builder) =>({
         getContacts : builder.query({
