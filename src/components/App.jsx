@@ -6,14 +6,12 @@ import {Container,Title} from "./App.styled";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFilters, } from "redux/Contacts/Contacts.selector";
 import { usersSearchAction,} from "redux/Contacts/Contacts.slice";
-import { useGetContactsQuery, useDeleteContactsMutation, useAddUserMutation } from "redux/rtk-contacts/rtk-contacts.api";
+import { useGetContactsQuery, useAddUserMutation } from "redux/rtk-contacts/rtk-contacts.api";
 
 
 export const App = () =>{
   const {data, isLoading, isSuccess}= useGetContactsQuery()
   
-
-  const [triggerDelete] = useDeleteContactsMutation()
   const [addUser] = useAddUserMutation()
 
   const filter = useSelector(selectFilters)
@@ -24,9 +22,7 @@ export const App = () =>{
     dispatch(usersSearchAction(value))
   }
 
-  const deleteFromContacts = (contactToDelete) =>{
-    triggerDelete(contactToDelete.id)
-  }
+
   
   const checkIsInContacts = (value) => {
     const checked = data.find(contact => contact.name === value) !== undefined;
@@ -50,7 +46,7 @@ export const App = () =>{
       <Title>Contacts</Title>
       <InputFilter onInput={addFilter} value={filter}/>
       {isLoading && <Title>Loading...</Title>}
-      {isSuccess &&  <Contacts  deleteFromContacts={deleteFromContacts}/>}
+      {isSuccess &&  <Contacts/>}
     </Container>
   )
 }
