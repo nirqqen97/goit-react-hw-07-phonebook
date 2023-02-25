@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectFilters } from "redux/Contacts/Contacts.selector";
+import { usersSearchAction } from "redux/Contacts/Contacts.slice";
 import { Input, Label } from "./InputFilter.styled";
-export const InputFilter = ({onInput}) => {
-    const filter = useSelector(selectFilters)
-
- function handeInput ({target, }) {
-        onInput(target.value);}
+export const InputFilter = () => {
+    const filter = useSelector(selectFilters);
+    const dispatch = useDispatch()
+ 
+        const handeInput =  ({target, }) => {
+            dispatch(usersSearchAction(target.value))}
  return ( 
          <Label>
              Find contacts by name

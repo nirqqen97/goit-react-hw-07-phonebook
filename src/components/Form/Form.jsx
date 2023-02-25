@@ -1,10 +1,13 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-
+import shortid from "shortid";
 import {FormWrap,SubmitBtn,Input, Label} from "./Form.styled";
+import { useAddUserMutation, useGetContactsQuery } from "redux/rtk-contacts/rtk-contacts.api";
 export const Form = ({onSubmit}) => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
+    const {data}= useGetContactsQuery()
+    const [addUser] = useAddUserMutation()
 
     const handleNameChange = (e) =>{
         setName(e.currentTarget.value)
@@ -14,11 +17,27 @@ export const Form = ({onSubmit}) => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(name,phone)
-        setPhone("")
-        setName('')
+        addContact(name,phone);
+        setPhone("");
+        setName('');
         e.target.reset()
         }
+       
+         
+  const checkIsInContacts = (value) => {
+    const checked = data.find(contact => contact.name === value) !== undefined;
+    return checked
+  }
+  const addContact = (name, phone) => {
+    if (checkIsInContacts(name)) {
+      alert(`${name} is already in contacts`);
+      return;
+    }
+
+    addUser({id:shortid.generate(),name,phone}); 
+  };
+
+        
         return(
             <FormWrap autoComplete="off" onSubmit={handleSubmit}>
             <Label>
