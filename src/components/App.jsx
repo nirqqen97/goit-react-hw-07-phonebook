@@ -41,7 +41,7 @@ export const App = () =>{
       name,
       telephone,
     };
-    addUser(contact); 
+    addUser({contact}); 
   };
   
 
