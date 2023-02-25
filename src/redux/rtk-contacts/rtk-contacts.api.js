@@ -5,7 +5,9 @@ export const contactsApi = createApi({
     tagTypes: ['Contacts'],
     baseQuery: fetchBaseQuery({baseUrl:'https://63f793b8e8a73b486afb43d3.mockapi.io'}),
     providesTags: ({data}) =>
+    
     data?
+    
         [
           ...data.map(({ id }) => ({ type: 'Contacts', id })),
           { type: 'Contacts', id: 'LIST' },
@@ -22,6 +24,8 @@ export const contactsApi = createApi({
               method: 'DELETE',
             }),
           }),
+          invalidatesTags: (result, error, id) => [{ type: 'Posts', id }],
+
       
           addUser: builder.mutation({
             query: (newUser) => ({
@@ -30,8 +34,7 @@ export const contactsApi = createApi({
               body: newUser,
             }),
           }),
-      
-          invalidatesTags: (result, error, id) => [{ type: 'Contacts', id }],
+
         }),
       })
 

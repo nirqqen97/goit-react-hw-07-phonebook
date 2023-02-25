@@ -11,6 +11,7 @@ import { useGetContactsQuery, useDeleteContactsMutation, useAddUserMutation } fr
 
 export const App = () =>{
   const {data, isLoading, isSuccess}= useGetContactsQuery()
+  
 
   const [triggerDelete] = useDeleteContactsMutation()
   const [addUser] = useAddUserMutation()
